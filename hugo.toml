@@ -1,7 +1,8 @@
 baseURL = "https://lalalavir.github.io/cutlass_study/"
-languageCode = "zh-cn"
 title = "Cutlass Study Blog"
 theme = "relearn"
+defaultContentLanguage = "zh"
+defaultContentLanguageInSubdir = false
 
 [outputs]
 home = ["HTML", "RSS", "SEARCH"]
@@ -21,3 +22,23 @@ notAlternative = true
   themeVariant = "olive-gray-green"
   disableSearchHiddenPages = true
   disableLandingPageButton = true
+  disableLanguageSwitchingButton = false
+
+[languages]
+  [languages.zh]
+    weight = 1
+    languageCode = "zh-CN"
+    languageName = "中文"
+    title = "Cutlass 学习博客"
+    contentDir = "content/zh"
+    [languages.zh.params]
+      landingPageName = "首页"
+
+  [languages.en]
+    weight = 2
+    languageCode = "en-US"
+    languageName = "English"
+    title = "Cutlass Study Blog"
+    contentDir = "content/en"
+    [languages.en.params]
+      landingPageName = "Home"
