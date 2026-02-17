@@ -1,0 +1,41 @@
+@import "theme-relearn-light.css";
+
+:root {
+  --PRIMARY-color: rgba(106, 124, 74, 1);
+  --PRIMARY-HOVER-color: rgba(88, 104, 61, 1);
+  --SECONDARY-color: rgba(74, 108, 58, 1);
+  --SECONDARY-HOVER-color: rgba(58, 89, 45, 1);
+  --ACCENT-color: rgba(165, 131, 84, 1);
+  --ACCENT-HOVER-color: rgba(138, 109, 69, 1);
+
+  --MENU-HEADER-color: rgba(239, 242, 232, 1);
+  --MENU-HEADER-BG-color: rgba(106, 124, 74, 1);
+  --MENU-HEADER-BORDER-color: rgba(132, 147, 104, 1);
+  --MENU-SEARCH-color: rgba(232, 235, 226, 1);
+  --MENU-SEARCH-BG-color: rgba(56, 63, 53, 1);
+  --MENU-SEARCH-BORDER-color: rgba(92, 102, 88, 1);
+  --MENU-SECTIONS-BG-color: rgba(42, 48, 40, 1);
+  --MENU-SECTIONS-ACTIVE-BG-color: rgba(67, 74, 64, 1);
+  --MENU-SECTIONS-LINK-color: rgba(220, 224, 214, 1);
+  --MENU-SECTIONS-LINK-HOVER-color: rgba(245, 247, 239, 1);
+  --MENU-SECTION-ACTIVE-CATEGORY-color: rgba(241, 243, 234, 1);
+  --MENU-SECTION-ACTIVE-CATEGORY-BG-color: rgba(74, 80, 69, 1);
+  --MENU-SECTION-SEPARATOR-color: rgba(56, 63, 53, 1);
+  --MENU-VISITED-color: rgba(132, 154, 97, 1);
+
+  --MAIN-BG-color: rgba(245, 245, 239, 1);
+  --MAIN-TEXT-color: rgba(47, 50, 40, 1);
+  --MAIN-TITLES-TEXT-color: rgba(43, 47, 36, 1);
+  --MAIN-TITLES-H1-TEXT-color: rgba(36, 40, 31, 1);
+  --MAIN-LINK-color: rgba(74, 108, 58, 1);
+  --MAIN-LINK-HOVER-color: rgba(58, 89, 45, 1);
+
+  --CODE-theme: relearn-light;
+  --CODE-INLINE-color: rgba(70, 78, 53, 1);
+  --CODE-INLINE-BG-color: rgba(239, 238, 225, 1);
+  --CODE-INLINE-BORDER-color: rgba(221, 216, 190, 1);
+
+  --BOX-CAPTION-color: rgba(255, 255, 255, 1);
+  --BOX-BG-color: rgba(248, 249, 244, 0.92);
+  --BOX-TEXT-color: rgba(39, 44, 34, 1);
+}

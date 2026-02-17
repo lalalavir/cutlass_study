@@ -18,6 +18,6 @@ notAlternative = true
       unsafe = true
 
 [params]
-  themeVariant = "relearn-dark"
+  themeVariant = "olive-gray-green"
   disableSearchHiddenPages = true
   disableLandingPageButton = true
