@@ -1,0 +1,23 @@
+{{- $current := . -}}
+{{- $root := site.Home -}}
+
+<aside class="vt-sidebar" aria-label="Section navigation">
+  <div class="vt-sidebar-brand">
+    <a href="{{ "/" | relLangURL }}">{{ site.Title }}</a>
+  </div>
+  <div class="vt-sidebar-subtitle">Content</div>
+
+  <nav class="vt-nav-tree">
+    <ul class="vt-tree-root">
+      {{- range $root.RegularPages.ByTitle -}}
+      <li class="vt-tree-leaf {{ if eq $current.RelPermalink .RelPermalink }}is-active{{ end }}">
+        <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+      </li>
+      {{- end -}}
+
+      {{- range $root.Sections.ByTitle -}}
+      {{- partial "sidebar-tree-node.html" (dict "node" . "current" $current) -}}
+      {{- end -}}
+    </ul>
+  </nav>
+</aside>
