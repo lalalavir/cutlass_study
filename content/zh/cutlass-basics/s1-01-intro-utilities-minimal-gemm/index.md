@@ -7,23 +7,14 @@ date: 2026-02-17T10:00:00+08:00
 draft: false
 ---
 
-这一篇对应教学大纲的 S1-01。目标很直接：先不追求“最快”，先把 CUTLASS 的最小 GEMM 路径完整走通，并理解 utilities 在这个过程中到底帮了什么忙。
+这一篇我们用cutlass提供的工具，将最小GEMM路径走通
 
-## 1. 我们要解决什么问题
+## 1. 先认识四个关键的类
 
-手写 CUDA GEMM 时，最容易分散注意力的不是算子本身，而是配套工作：
-- 张量内存分配和拷贝
-- 初始化输入
-- 对照参考实现验证正确性
-
-`examples/01_cutlass_utilities/cutlass_utilities.cu` 的价值是把这些“配套工作”标准化，让你把精力放在 GEMM 配置与数据流上。
-
-## 2. 先认识四个关键工具
-
-这个示例里最值得先掌握的是四个点：
+这个示例里最值得先掌握的是四个类：
 
 1. `cutlass::HostTensor<>`
-作用：同时管理 host/device 两侧内存，并提供 `sync_host()` 等同步接口。
+作用：同时管理 host/device 两侧内存。
 
 2. `cutlass::reference::device::TensorFillRandomGaussian`
 作用：在 device 侧初始化张量，生成可复现实验输入。
@@ -34,20 +25,68 @@ draft: false
 4. `cutlass::reference::host::TensorEquals`
 作用：比较参考结果与 CUTLASS kernel 输出。
 
-## 3. 最小 GEMM 的主流程（按代码顺序）
+>reference这个命名空间主要是参考实现和验证工具，支持host端和device端
 
-可以把这个示例抽象成 6 步：
+## 2. 最小 GEMM 的主流程
 
-1. 定义 `Gemm` 类型并准备参数（M/N/K、alpha/beta）
-2. 用 `HostTensor` 创建 A/B/C
-3. 在 device 侧填充随机输入
-4. 调用 `cutlass::gemm::device::Gemm` 执行计算
-5. 把数据同步到 host 并调用 host reference GEMM
-6. 用 `TensorEquals` 比较结果
+首先定义一个host端函数，用来测试矩阵乘法
+```cpp
+#include "cutlass/cutlass.h" 
+#include "cutlass/numeric_types.h" //half_t
+#include "cutlass/layout/layout.h" //layout
+#include "cutlass/util/host_tensor.h"  //host_tensor
+#include "cutlass/util/reference/host/gemm.h"  //Gemm()
+#include "cutlass/util/reference/device/tensor_fill.h" //TensorFillRandomGaussian()
+cudaError_t TestCutlassGemm(int M,int K,int N,cutlass::half_t alpha, cutlass::half_t beta)
+{
+	cudaError_t result;
 
-如果这 6 步能跑通，你就已经具备了后续所有“换 tile、换数据类型、换 epilogue”的基础框架。
+	return result;
+}
+```
+然后我们创建`HostTensor`。`HostTensor`的类模板有两个参数：`Element`和`Layout`。`Element`表示张量元素类型,例如`float`、`half_t`等，`layout`表示逻辑坐标到线性内存地址的映射，包括列主序和行主序。它决定了 `stride`、`TensorCoord` 解释方式，以及后续 `iterator` 如何访问。
+```cpp
+cutlass::HostTensor<cutlass::half_t, cutlass::layout::ColumnMajor> A(cutlass::MatrixCoord(M, K));
+cutlass::HostTensor<cutlass::half_t, cutlass::layout::ColumnMajor> B(cutlass::MatrixCoord(K, N));
+cutlass::HostTensor<cutlass::half_t, cutlass::layout::ColumnMajor> C_cutlass(cutlass::MatrixCoord(M, N));
+cutlass::HostTensor<cutlass::half_t, cutlass::layout::ColumnMajor> C_reference(cutlass::MatrixCoord(M, N));
+```
 
-## 4. 先做三组小实验
+在这之后，我们会随机填充这三个矩阵。
+```cpp
+uint64_t seed = 2000;
+cutlass::half_t mean = 0.0_hf;
+cutlass::half_t stddev = 5.0_hf;
+
+int bits_less_than_one = 0;
+
+cutlass::reference::device::TensorFillRandomGaussian(
+	A.device_view(),
+	seed,
+	mean,
+	stddev,
+	bits_less_than_one
+);
+
+cutlass::reference::device::TensorFillRandomGaussian(
+	B.device_view(),
+	seed *500,
+	mean,
+	stddev,
+	bits_less_than_one
+);
+cutlass::reference::device::TensorFillRandomGaussian(
+	C_cutlass.device_view(),
+	seed * 300,
+	mean,
+	stddev,
+	bits_less_than_one
+);
+
+cutlass::device_memory::copy_device_to_device(C_reference.device_data(), C_cutlass.device_data(), C_cutlass.capacity());
+```
+
+## 3. 先做三组小实验
 
 建议先只改参数，不改模板结构：
 
@@ -57,7 +96,7 @@ draft: false
 
 每次只改一个变量，并记录现象。这会比一次改很多参数更容易建立直觉。
 
-## 5. 本节你应该带走什么
+## 4. 本节你应该带走什么
 
 - 你可以不手写复杂内存管理，也能搭出可靠的 GEMM 实验框架。
 - utilities 不是“可有可无”的辅助，而是快速迭代和排错的基础设施。
