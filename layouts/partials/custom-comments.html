@@ -4,25 +4,65 @@
   {{- $repoId := $giscus.repoId | default "" -}}
   {{- $category := $giscus.category | default "" -}}
   {{- $categoryId := $giscus.categoryId | default "" -}}
+  {{- $collapsible := $giscus.collapsible | default true -}}
+  {{- $initiallyOpen := $giscus.initiallyOpen | default false -}}
+  {{- $toggleLabel := $giscus.toggleLabel | default (cond (eq site.Language.Lang "en") "Comments" "评论区") -}}
+  {{- $hintLabel := cond (eq site.Language.Lang "en") "Ask questions, correct mistakes, and share ideas" "欢迎提问、补充和纠错" -}}
   {{- if and $repo $repoId $category $categoryId -}}
-<div class="giscus-comments" style="margin: 2rem 0 0;">
-  <script
-    src="https://giscus.app/client.js"
-    data-repo="{{ $repo }}"
-    data-repo-id="{{ $repoId }}"
-    data-category="{{ $category }}"
-    data-category-id="{{ $categoryId }}"
-    data-mapping="{{ $giscus.mapping | default "pathname" }}"
-    data-strict="{{ $giscus.strict | default "0" }}"
-    data-reactions-enabled="{{ $giscus.reactionsEnabled | default "1" }}"
-    data-emit-metadata="{{ $giscus.emitMetadata | default "0" }}"
-    data-input-position="{{ $giscus.inputPosition | default "bottom" }}"
-    data-theme="{{ $giscus.theme | default "preferred_color_scheme" }}"
-    data-lang="{{ $giscus.lang | default "zh-CN" }}"
-    crossorigin="anonymous"
-    async>
-  </script>
-</div>
+{{- if $collapsible -}}
+<section class="giscus-comments-section">
+<details class="giscus-comments-card"{{ if $initiallyOpen }} open{{ end }}>
+  <summary class="giscus-comments-summary">
+    <span class="giscus-comments-title">{{ $toggleLabel }}</span>
+    <span class="giscus-comments-hint">{{ $hintLabel }}</span>
+    <span class="giscus-comments-chevron" aria-hidden="true"></span>
+  </summary>
+  <div class="giscus-comments-body">
+    <script
+      src="https://giscus.app/client.js"
+      data-repo="{{ $repo }}"
+      data-repo-id="{{ $repoId }}"
+      data-category="{{ $category }}"
+      data-category-id="{{ $categoryId }}"
+      data-mapping="{{ $giscus.mapping | default "pathname" }}"
+      data-strict="{{ $giscus.strict | default "0" }}"
+      data-reactions-enabled="{{ $giscus.reactionsEnabled | default "1" }}"
+      data-emit-metadata="{{ $giscus.emitMetadata | default "0" }}"
+      data-input-position="{{ $giscus.inputPosition | default "bottom" }}"
+      data-theme="{{ $giscus.theme | default "preferred_color_scheme" }}"
+      data-lang="{{ $giscus.lang | default "zh-CN" }}"
+      crossorigin="anonymous"
+      async>
+    </script>
+  </div>
+</details>
+</section>
+{{- else -}}
+<section class="giscus-comments-section giscus-comments-flat">
+  <div class="giscus-comments-flat-header">
+    <span class="giscus-comments-title">{{ $toggleLabel }}</span>
+    <span class="giscus-comments-hint">{{ $hintLabel }}</span>
+  </div>
+  <div class="giscus-comments-body">
+    <script
+      src="https://giscus.app/client.js"
+      data-repo="{{ $repo }}"
+      data-repo-id="{{ $repoId }}"
+      data-category="{{ $category }}"
+      data-category-id="{{ $categoryId }}"
+      data-mapping="{{ $giscus.mapping | default "pathname" }}"
+      data-strict="{{ $giscus.strict | default "0" }}"
+      data-reactions-enabled="{{ $giscus.reactionsEnabled | default "1" }}"
+      data-emit-metadata="{{ $giscus.emitMetadata | default "0" }}"
+      data-input-position="{{ $giscus.inputPosition | default "bottom" }}"
+      data-theme="{{ $giscus.theme | default "preferred_color_scheme" }}"
+      data-lang="{{ $giscus.lang | default "zh-CN" }}"
+      crossorigin="anonymous"
+      async>
+    </script>
+  </div>
+</section>
+{{- end -}}
   {{- else if hugo.IsServer -}}
 <div style="margin-top: 1rem; padding: .75rem 1rem; border: 1px solid #d9a441; border-radius: 6px;">
   Giscus is enabled but not fully configured. Please set <code>params.giscus.categoryId</code>.

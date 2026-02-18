@@ -18,7 +18,14 @@ notAlternative = true
     [markup.goldmark.renderer]
       unsafe = true
 
+
+    [markup.goldmark.extensions.passthrough]
+      enable = true
+      [markup.goldmark.extensions.passthrough.delimiters]
+        inline = [['\(', '\)'], ['$', '$']]
+        block  = [['\[', '\]'], ['$$', '$$']]
 [params]
+  math.force = true
   themeVariant = "olive-gray-green"
   disableSearchHiddenPages = true
   disableLandingPageButton = true
@@ -37,6 +44,9 @@ notAlternative = true
   inputPosition = "bottom"
   theme = "preferred_color_scheme"
   lang = "zh-CN"
+  collapsible = true
+  initiallyOpen = true
+  toggleLabel = "评论区"
 
 [languages]
   [languages.zh]
@@ -68,3 +78,4 @@ notAlternative = true
   name = "GitHub Star"
   url = "https://github.com/lalalavir/cutlass_study"
   weight = 10
+

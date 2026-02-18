@@ -31,6 +31,6 @@ slug = "cutlass基础"
 3. 把关键参数变化记录成自己的实验笔记
 
 ## 正文目录
-1. [S1-01 课程导论与张量容器：从 01_cutlass_utilities 写一个最小 GEMM]({{< relref "/cutlass-basics/s1-01-intro-utilities-minimal-gemm/index.md" >}})
+1. [01 导论与张量容器：从 01_cutlass_utilities 写一个最小 GEMM]({{< relref "/cutlass-basics/s1-01-intro-utilities-minimal-gemm/index.md" >}})
 
 后续每增加一个单元，都会在这里同步更新目录入口。

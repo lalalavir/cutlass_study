@@ -1,10 +1,11 @@
----
-title: "S1-01 课程导论与张量容器：从 01_cutlass_utilities 写一个最小 GEMM"
+﻿---
+title: "01 导论与张量容器：从 01_cutlass_utilities 写一个最小 GEMM"
 slug: "s1-01-课程导论与张量容器-最小-gemm"
 translationKey: "s1-01-intro-utilities-minimal-gemm"
 weight: 1
 date: 2026-02-17T10:00:00+08:00
 draft: false
+math: true
 ---
 
 这一篇我们用cutlass提供的工具，将最小GEMM路径走通
@@ -53,7 +54,7 @@ cutlass::HostTensor<cutlass::half_t, cutlass::layout::ColumnMajor> C_reference(c
 ```
 
 在这之后，我们会随机填充这三个矩阵。下面简单介绍一下`TensorFillRandomGaussian()`这个函数。该函数会把张量里的每个值都初始化为服从N(mean,stddev)的随机值。
-第一个参数为张量的view()，第二个为随机数种子，第三个参数控制正态分布的均值，第四个参数控制正态分布的标准差，第五个参数进行精度控制，表示保留多少个小数二进制位，通过$q=round(x* 2^bits) / 2^bits$来计算，例如bits=0就表示截断到整数，这个参数主要用来做数值鲁棒性测试。最后一个`exclude_zero`用来表示是否避免生成0。
+第一个参数为张量的view()，第二个为随机数种子，第三个参数控制正态分布的均值，第四个参数控制正态分布的标准差，第五个参数进行精度控制，表示保留多少个小数二进制位，通过$q=\operatorname{round}(x\cdot 2^{\text{bits}})/2^{\text{bits}}$来计算，例如bits=0就表示截断到整数，这个参数主要用来做数值鲁棒性测试。最后一个`exclude_zero`用来表示是否避免生成0。
 
 >TensorRef和TensorView的区别主要在于TensorView会保存extent,能做更多与边界相关的操作。
 
