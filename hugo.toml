@@ -24,6 +24,20 @@ notAlternative = true
   disableLandingPageButton = true
   disableLanguageSwitchingButton = false
 
+[params.giscus]
+  enable = true
+  repo = "lalalavir/cutlass_study"
+  repoId = "R_kgDORSF6jw"
+  category = "General"
+  categoryId = "DIC_kwDORSF6j84C2qaZ"
+  mapping = "pathname"
+  strict = "0"
+  reactionsEnabled = "1"
+  emitMetadata = "0"
+  inputPosition = "bottom"
+  theme = "preferred_color_scheme"
+  lang = "zh-CN"
+
 [languages]
   [languages.zh]
     weight = 1
@@ -42,3 +56,15 @@ notAlternative = true
     contentDir = "content/en"
     [languages.en.params]
       landingPageName = "Home"
+
+[[languages.zh.menu.shortcuts]]
+  pre = '<i class="fa-fw fab fa-github"></i> '
+  name = "GitHub Star"
+  url = "https://github.com/lalalavir/cutlass_study"
+  weight = 10
+
+[[languages.en.menu.shortcuts]]
+  pre = '<i class="fa-fw fab fa-github"></i> '
+  name = "GitHub Star"
+  url = "https://github.com/lalalavir/cutlass_study"
+  weight = 10
