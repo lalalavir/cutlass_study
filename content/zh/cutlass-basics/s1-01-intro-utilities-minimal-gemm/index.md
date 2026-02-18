@@ -219,10 +219,11 @@ if (!cutlass::reference::host::TensorEquals(
 
 ## 代码参考
 
-[查看完整 C++ 代码](./code-reference/)
+[查看完整 C++ 代码]({{< relref "/cutlass-basics/s1-01-intro-utilities-minimal-gemm-code-reference/" >}})
 
 ### 参考来源
 
 - [CUTLASS Example 00: basic_gemm.cu](https://github.com/NVIDIA/cutlass/blob/main/examples/00_basic_gemm/basic_gemm.cu)
 - [CUTLASS Example 01: cutlass_utilities.cu](https://github.com/NVIDIA/cutlass/blob/main/examples/01_cutlass_utilities/cutlass_utilities.cu)
+
 

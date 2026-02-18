@@ -45,7 +45,7 @@ notAlternative = true
   theme = "preferred_color_scheme"
   lang = "zh-CN"
   collapsible = true
-  initiallyOpen = true
+  initiallyOpen = false
   toggleLabel = "评论区"
 
 [languages]
