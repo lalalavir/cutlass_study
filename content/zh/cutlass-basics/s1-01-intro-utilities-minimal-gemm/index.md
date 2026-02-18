@@ -1,5 +1,5 @@
 ﻿---
-title: "01 导论与张量容器：从 01_cutlass_utilities 写一个最小 GEMM"
+title: "01 张量容器:写一个最小GEMM"
 slug: "s1-01-课程导论与张量容器-最小-gemm"
 translationKey: "s1-01-intro-utilities-minimal-gemm"
 weight: 1
@@ -171,23 +171,58 @@ result = cutlass_hgemm_nn(
   );
 
   if (result != cudaSuccess) {
+    std::cerr << "Error - CUTLASS GEMM launch failed" << std::endl;
     return result;
   }
 ```
-## 3. 先做三组小实验
 
-建议先只改参数，不改模板结构：
+在这之后，我们与reference中的参考对比一下，来检验我们是否写对。因为我们目前的Tensor是在device端，所以在一开始我们需要先同步到host端。之后的步骤和cutlass_hgemm_nn中一致。另外，值得注意的是，这边我们直接传了host_ref()，实际上在调用device端gemm的时候，我们也可以传device_ref()，效果和传一个构造函数(data,stride)是一样的。
+```cpp
+#include "cutlass/util/reference/host/tensor_compare.h" //TensorEquals()
 
-1. 维度实验：`M=N=K=128 -> 256`
-2. 标量实验：`alpha=1,beta=0` 与 `alpha=1,beta=1`
-3. 稳定性实验：固定 seed，多次运行确认结果一致
 
-每次只改一个变量，并记录现象。这会比一次改很多参数更容易建立直觉。
+A.sync_host();
+B.sync_host();
+C_cutlass.sync_host();
+C_reference.sync_host();
 
-## 4. 本节你应该带走什么
+cutlass::reference::host::Gemm<cutlass::half_t,cutlass::layout::ColumnMajor,
+cutlass::half_t,cutlass::layout::ColumnMajor,cutlass::half_t,cutlass::layout::ColumnMajor,
+cutlass::half_t,cutlass::half_t
+> gemm_ref;
+
+gemm_ref(
+	{ M, N, K },                          // problem size (type: cutlass::gemm::GemmCoord)
+	alpha,                              // alpha        (type: cutlass::half_t)
+	A.host_ref(),                       // A            (type: TensorRef<half_t, ColumnMajor>)
+	B.host_ref(),                       // B            (type: TensorRef<half_t, ColumnMajor>)
+	beta,                               // beta         (type: cutlass::half_t)
+	C_reference.host_ref()              // C            (type: TensorRef<half_t, ColumnMajor>)
+);
+
+if (!cutlass::reference::host::TensorEquals(
+	C_reference.host_view(),
+	C_cutlass.host_view()))
+{
+	std::cerr << "Error - CUTLASS GEMM kernel differs from reference" << std::endl;
+	result = cudaErrorUnknown;
+}
+```
+
+## 3. 本节你应该学到什么
 
 - 你可以不手写复杂内存管理，也能搭出可靠的 GEMM 实验框架。
 - utilities 不是“可有可无”的辅助，而是快速迭代和排错的基础设施。
 - 后续章节（layout、tile iterator、epilogue）都可以复用这套最小实验骨架。
 
 下一篇会接着从这个骨架出发，进一步拆解数据布局与线程映射的关系。
+
+## 代码参考
+
+[查看完整 C++ 代码](./code-reference/)
+
+### 参考来源
+
+- [CUTLASS Example 00: basic_gemm.cu](https://github.com/NVIDIA/cutlass/blob/main/examples/00_basic_gemm/basic_gemm.cu)
+- [CUTLASS Example 01: cutlass_utilities.cu](https://github.com/NVIDIA/cutlass/blob/main/examples/01_cutlass_utilities/cutlass_utilities.cu)
+
