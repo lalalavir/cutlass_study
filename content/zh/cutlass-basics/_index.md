@@ -32,6 +32,6 @@ slug = "cutlass基础"
 
 ## 正文目录
 1. [01 张量容器:写一个最小GEMM]({{< relref "/cutlass-basics/s1-01-intro-utilities-minimal-gemm/index.md" >}})
+2. [02 寄存器与共享内存可视化：从 02_dump_reg_shmem 看数据搬运路径]({{< relref "/cutlass-basics/s1-02-reg-shmem-visualization/index.md" >}})
 
 后续每增加一个单元，都会在这里同步更新目录入口。
-

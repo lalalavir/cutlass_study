@@ -27,6 +27,7 @@ notAlternative = true
 [params]
   math.force = true
   themeVariant = "olive-gray-green"
+  disableNextPrev = false
   disableSearchHiddenPages = true
   disableLandingPageButton = true
   disableLanguageSwitchingButton = false
