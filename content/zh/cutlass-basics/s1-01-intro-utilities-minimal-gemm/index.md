@@ -14,6 +14,8 @@ math: true
 
 这个示例里最值得先掌握的是四个类：
 
+![01 GEMM 计算流程](../../excalidraw/s1-01-gemm-compute-flow.svg)
+
 1. `cutlass::HostTensor<>`
 作用：同时管理 host/device 两侧内存。
 

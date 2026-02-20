@@ -124,6 +124,7 @@ GmemIterator的构造函数的参数如下：
 - Ref:全局内存起始指针
 - Extent: 逻辑矩阵范围
 - Thread_id: 线程 id，用于 `ThreadMap` 计算该线程负责的元素起点。
+
 然后我们会声明一个基于该`iterator`对应的寄存器片段类型实例，即`fragment`。这个类型的用途是作为load/store的中间容器。
 `dump_fragment()`函数用于打印寄存器里的`fragment`，经常用于回答两个问题:每个线程到底读到了哪些元素; ThreadMap/Iterator 映射是否符合预期。该函数参数可以查看自带的英文注释。
 
